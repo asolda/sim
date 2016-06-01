@@ -14,8 +14,8 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	numAgents := 500
-	numEdges := 1000
+	numAgents := 1000
+	numEdges := 3000
 	numStep := 500
 
 	exposedTime := 2
@@ -23,7 +23,7 @@ func main() {
 
 	seedSize := 1
 
-	edgeMaxLifeSpan := 30
+	edgeMaxLifeSpan := 50
 
 	p := 1.0
 
@@ -91,5 +91,41 @@ func main() {
 	}
 
 	fmt.Println("Final deaths count (max dRank):", rCounter)
+
+	fmt.Println("Computing trueRank...")
+
+	simulation.ClearSeeds(&model)
+
+	trueRanks := make([]float64, numAgents)
+
+	for i, agent := range model.Graph.Agents {
+		trueRanks[i] = metrics.ComputeRank(agent, model, numStep)
+	}
+
+	fmt.Println("trueRank done... preparing new simulation")
+
+	topTrueRanks := utils.GetMax(trueRanks, seedSize)
+
+	trueSeed := make([]framework.Agent, seedSize)
+
+	for i := 0; i < seedSize; i++ {
+		trueSeed[i] = framework.CreateAgent(topTrueRanks[i], 0, 0, 0)
+	}
+
+	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, trueSeed, edgeMaxLifeSpan, p)
+
+	fmt.Println("Running simulation (trueRank)")
+
+	simulation.PerformSim(model, numStep)
+
+	rCounter = 0
+	for _, agent := range model.Graph.GetAgents() {
+		if agent.GetStatus() == framework.REMOVED {
+			//fmt.Println(agent.GetID(), "-> REMOVED")
+			rCounter++
+		}
+	}
+
+	fmt.Println("Final deaths count (max trueRank):", rCounter)
 
 }

@@ -133,9 +133,9 @@ func (pr *pageRank) Rank(followingProb, tolerance float64, resultFunc func(label
 	change := 2.0
 
 	for change > tolerance {
-		new_p := pr.step(followingProb, tOverSize, p, danglingNodes)
-		change = calculateChange(p, new_p)
-		p = new_p
+		newP := pr.step(followingProb, tOverSize, p, danglingNodes)
+		change = calculateChange(p, newP)
+		p = newP
 	}
 
 	for i, pForI := range p {

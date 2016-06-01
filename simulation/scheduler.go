@@ -42,3 +42,21 @@ func (m SimulationModel) PerformStep(step int) {
 
 	m.Graph = m.workingCopy
 }
+
+func ClearSeeds(m *SimulationModel) {
+	for i := 0; i < len(m.Graph.Agents); i++ {
+		a := &m.Graph.Agents[i]
+		a.UpdateStatus(framework.SAFE)
+	}
+}
+
+func AddSeed(m *SimulationModel, seed framework.Agent) {
+	for i := 0; i < len(m.Graph.Agents); i++ {
+		a := &m.Graph.Agents[i]
+		if a.Compare(seed) {
+			a.UpdateStatus(framework.EXPOSED)
+			//fmt.Println("Infecting node", a)
+			break
+		}
+	}
+}
