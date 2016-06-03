@@ -9,21 +9,23 @@ import (
 	"github.com/asolda/sim/metrics"
 	"github.com/asolda/sim/simulation"
 	"github.com/asolda/sim/utils"
+
+	"github.com/fatih/color"
 )
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	numAgents := 1000
-	numEdges := 3000
+	numAgents := 500
+	numEdges := 1000
 	numStep := 500
 
 	exposedTime := 2
 	infectedTime := 40
 
-	seedSize := 1
+	seedSize := 5
 
-	edgeMaxLifeSpan := 50
+	edgeMaxLifeSpan := 30
 
 	p := 1.0
 
@@ -40,7 +42,8 @@ func main() {
 	}
 
 	//fmt.Println("Initial seed size:", seedSize)
-	fmt.Println("Final deaths count:", rCounter)
+	//fmt.Println("Final deaths count:", rCounter)
+	color.Red("Final deaths count: %d", rCounter)
 
 	fmt.Println("Performing page rank...")
 
@@ -74,7 +77,8 @@ func main() {
 		}
 	}
 
-	fmt.Println("Final deaths count (max rank):", rCounter)
+	//fmt.Println("Final deaths count (max rank):", rCounter)
+	color.Red("Final deaths count (max rank): %d", rCounter)
 
 	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, dSeed, edgeMaxLifeSpan, p)
 
@@ -90,7 +94,8 @@ func main() {
 		}
 	}
 
-	fmt.Println("Final deaths count (max dRank):", rCounter)
+	//fmt.Println("Final deaths count (max dRank):", rCounter)
+	color.Red("Final deaths count (max dRank): %d", rCounter)
 
 	fmt.Println("Computing trueRank...")
 
@@ -126,6 +131,6 @@ func main() {
 		}
 	}
 
-	fmt.Println("Final deaths count (max trueRank):", rCounter)
-
+	//fmt.Println("Final deaths count (max trueRank):", rCounter)
+	color.Red("Final deaths count (max trueRank) %d:", rCounter)
 }
