@@ -22,7 +22,7 @@ func main() {
 	exposedTime := 2
 	infectedTime := 40
 
-	seedSize := 1
+	seedSize := 3
 
 	edgeMaxLifeSpan := 30
 
@@ -42,7 +42,7 @@ func main() {
 
 	//fmt.Println("Initial seed size:", seedSize)
 	//fmt.Println("Final deaths count:", rCounter)
-	color.Red("Final deaths count: %d", rCounter)
+	color.Yellow("Final deaths count:\t\t\t %d", rCounter)
 
 	//fmt.Println("Performing page rank...")
 
@@ -77,7 +77,7 @@ func main() {
 	}
 
 	//fmt.Println("Final deaths count (max rank):", rCounter)
-	color.Red("Final deaths count (max rank): %d", rCounter)
+	color.Green("Final deaths count (max rank):\t\t %d", rCounter)
 
 	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, dSeed, edgeMaxLifeSpan, p)
 
@@ -94,7 +94,7 @@ func main() {
 	}
 
 	//fmt.Println("Final deaths count (max dRank):", rCounter)
-	color.Red("Final deaths count (max dRank): %d", rCounter)
+	color.Red("Final deaths count (max dRank):\t\t %d", rCounter)
 
 	//fmt.Println("Computing trueRank...")
 
@@ -131,7 +131,7 @@ func main() {
 	}
 
 	//fmt.Println("Final deaths count (max trueRank):", rCounter)
-	color.Red("Final deaths count (max trueRank): %d", rCounter)
+	color.Blue("Final deaths count (max trueRank):\t %d", rCounter)
 
 	//fmt.Println("Computing deep page rank...")
 
@@ -159,5 +159,5 @@ func main() {
 		}
 	}
 
-	color.Red("Final deaths count (max deepRank): %d", rCounter)
+	color.Yellow("Final deaths count (max deepRank):\t %d", rCounter)
 }
