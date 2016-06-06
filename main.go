@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -23,7 +22,7 @@ func main() {
 	exposedTime := 2
 	infectedTime := 40
 
-	seedSize := 5
+	seedSize := 1
 
 	edgeMaxLifeSpan := 30
 
@@ -45,12 +44,12 @@ func main() {
 	//fmt.Println("Final deaths count:", rCounter)
 	color.Red("Final deaths count: %d", rCounter)
 
-	fmt.Println("Performing page rank...")
+	//fmt.Println("Performing page rank...")
 
 	ranks := metrics.PageRank(g)
 	dRanks := metrics.DynamicPageRank(g, numStep)
 
-	fmt.Println("Page rank done... preparing new simulations")
+	//fmt.Println("Page rank done... preparing new simulations")
 
 	topRanks := utils.GetMax(ranks, seedSize)
 	topDRanks := utils.GetMax(dRanks, seedSize)
@@ -65,7 +64,7 @@ func main() {
 
 	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, seed, edgeMaxLifeSpan, p)
 
-	fmt.Println("Running first simulation (rank)")
+	//fmt.Println("Running first simulation (rank)")
 
 	simulation.PerformSim(model, numStep)
 
@@ -82,7 +81,7 @@ func main() {
 
 	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, dSeed, edgeMaxLifeSpan, p)
 
-	fmt.Println("Running second simulation (dRank)")
+	//fmt.Println("Running second simulation (dRank)")
 
 	simulation.PerformSim(model, numStep)
 
@@ -97,7 +96,7 @@ func main() {
 	//fmt.Println("Final deaths count (max dRank):", rCounter)
 	color.Red("Final deaths count (max dRank): %d", rCounter)
 
-	fmt.Println("Computing trueRank...")
+	//fmt.Println("Computing trueRank...")
 
 	simulation.ClearSeeds(&model)
 
@@ -107,7 +106,7 @@ func main() {
 		trueRanks[i] = metrics.ComputeRank(agent, model, numStep)
 	}
 
-	fmt.Println("trueRank done... preparing new simulation")
+	//fmt.Println("trueRank done... preparing new simulation")
 
 	topTrueRanks := utils.GetMax(trueRanks, seedSize)
 
@@ -119,7 +118,7 @@ func main() {
 
 	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, trueSeed, edgeMaxLifeSpan, p)
 
-	fmt.Println("Running simulation (trueRank)")
+	//fmt.Println("Running simulation (trueRank)")
 
 	simulation.PerformSim(model, numStep)
 
@@ -132,5 +131,33 @@ func main() {
 	}
 
 	//fmt.Println("Final deaths count (max trueRank):", rCounter)
-	color.Red("Final deaths count (max trueRank) %d:", rCounter)
+	color.Red("Final deaths count (max trueRank): %d", rCounter)
+
+	//fmt.Println("Computing deep page rank...")
+
+	deepRanks := metrics.DeepPageRank(model, numStep, 0.85)
+
+	deepSeeds := utils.GetMax(deepRanks, seedSize)
+
+	deepSeed := make([]framework.Agent, seedSize)
+
+	for i := 0; i < seedSize; i++ {
+		deepSeed[i] = framework.CreateAgent(deepSeeds[i], 0, 0, 0)
+	}
+
+	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, deepSeed, edgeMaxLifeSpan, p)
+
+	//fmt.Println("Running simulation (deepRank)")
+
+	simulation.PerformSim(model, numStep)
+
+	rCounter = 0
+	for _, agent := range model.Graph.GetAgents() {
+		if agent.GetStatus() == framework.REMOVED {
+			//fmt.Println(agent.GetID(), "-> REMOVED")
+			rCounter++
+		}
+	}
+
+	color.Red("Final deaths count (max deepRank): %d", rCounter)
 }
