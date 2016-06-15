@@ -76,7 +76,6 @@ func main() {
 		}
 	}
 
-	//fmt.Println("Final deaths count (max rank):", rCounter)
 	color.Green("Final deaths count (max rank):\t\t %d", rCounter)
 
 	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, dSeed, edgeMaxLifeSpan, p)
@@ -160,4 +159,31 @@ func main() {
 	}
 
 	color.Yellow("Final deaths count (max deepRank):\t %d", rCounter)
+
+	adj := metrics.ToMatrix(g)
+	katzRanks := metrics.ComputeKatz(adj, 0.01, 0.8, 3000)
+	katzSeeds := utils.GetMax(katzRanks, seedSize)
+
+	katzSeed := make([]framework.Agent, seedSize)
+
+	for i := 0; i < seedSize; i++ {
+		katzSeed[i] = framework.CreateAgent(katzSeeds[i], 0, 0, 0)
+	}
+
+	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, katzSeed, edgeMaxLifeSpan, p)
+
+	//fmt.Println("Running simulation (deepRank)")
+
+	simulation.PerformSim(model, numStep)
+
+	rCounter = 0
+	for _, agent := range model.Graph.GetAgents() {
+		if agent.GetStatus() == framework.REMOVED {
+			//fmt.Println(agent.GetID(), "-> REMOVED")
+			rCounter++
+		}
+	}
+
+	color.Green("Final deaths count (max katzRank):\t %d", rCounter)
+
 }
