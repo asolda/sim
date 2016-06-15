@@ -2,7 +2,7 @@ package framework
 
 //Edge is a generic edge inside the dynamic simulation graph
 type Edge struct {
-	from      *Agent
+	From      *Agent
 	To        *Agent
 	timestamp int
 	lifespan  int
