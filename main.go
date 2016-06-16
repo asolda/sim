@@ -22,7 +22,7 @@ func main() {
 	exposedTime := 2
 	infectedTime := 40
 
-	seedSize := 3
+	seedSize := 1
 
 	edgeMaxLifeSpan := 30
 

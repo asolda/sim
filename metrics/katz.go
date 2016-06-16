@@ -21,12 +21,6 @@ func ToMatrix(g framework.Graph) *mat64.Dense {
 	return adj
 }
 
-func invertMatrix(d *mat64.Dense) {
-	n, _ := d.Dims()
-	matrix := d.View(0, 0, n, n)
-	d.Inverse(matrix)
-}
-
 func ComputeKatz(d *mat64.Dense, confidence float64, alpha float64, maxStep int) []float64 {
 	step := 0
 	d.Inverse(d)
