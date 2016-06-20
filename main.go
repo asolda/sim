@@ -15,16 +15,16 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	numAgents := 500
-	numEdges := 1000
-	numStep := 500
+	numAgents := 10000
+	numEdges := 25000
+	numStep := 5000
 
 	exposedTime := 2
-	infectedTime := 40
+	infectedTime := 150
 
-	seedSize := 1
+	seedSize := 5
 
-	edgeMaxLifeSpan := 30
+	edgeMaxLifeSpan := 100
 
 	p := 1.0
 
@@ -42,7 +42,7 @@ func main() {
 
 	//fmt.Println("Initial seed size:", seedSize)
 	//fmt.Println("Final deaths count:", rCounter)
-	color.Yellow("Final deaths count:\t\t\t %d", rCounter)
+	color.Yellow("Random seeds:\t %d", rCounter)
 
 	//fmt.Println("Performing page rank...")
 
@@ -76,7 +76,7 @@ func main() {
 		}
 	}
 
-	color.Green("Final deaths count (max rank):\t\t %d", rCounter)
+	color.Green("Top pageRank:\t %d", rCounter)
 
 	_, model = simulation.ParseWithSeed(numAgents, numEdges, numStep, exposedTime, infectedTime, dSeed, edgeMaxLifeSpan, p)
 
@@ -93,7 +93,7 @@ func main() {
 	}
 
 	//fmt.Println("Final deaths count (max dRank):", rCounter)
-	color.Red("Final deaths count (max dRank):\t\t %d", rCounter)
+	color.Red("Top dRank:\t %d", rCounter)
 
 	//fmt.Println("Computing trueRank...")
 
@@ -130,7 +130,7 @@ func main() {
 	}
 
 	//fmt.Println("Final deaths count (max trueRank):", rCounter)
-	color.Blue("Final deaths count (max trueRank):\t %d", rCounter)
+	color.Blue("Top bcRank:\t %d", rCounter)
 
 	//fmt.Println("Computing deep page rank...")
 
@@ -158,7 +158,7 @@ func main() {
 		}
 	}
 
-	color.Yellow("Final deaths count (max deepRank):\t %d", rCounter)
+	color.Yellow("Top deepRank:\t %d", rCounter)
 
 	adj := metrics.ToMatrix(g)
 	katzRanks := metrics.ComputeKatz(adj, 0.01, 0.8, 3000)
@@ -184,6 +184,6 @@ func main() {
 		}
 	}
 
-	color.Green("Final deaths count (max katzRank):\t %d", rCounter)
+	color.Green("Top katzRank:\t %d", rCounter)
 
 }
