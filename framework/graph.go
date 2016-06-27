@@ -23,11 +23,12 @@ func (g *Graph) AddDoubleEdge(first Agent, second Agent, ts int, ls int) {
 	g.AddEdge(second, first, ts, ls)
 }
 
-//AddEdge adds a new edge with specified fields
+//AddEdge adds a new edge with the specified fields
+//ts: timestamp
+//ls: lifespan
 func (g *Graph) AddEdge(from Agent, to Agent, ts int, ls int) {
 	var memberFrom *Agent
 	var memberTo *Agent
-	//for _, member := range g.GetAgents() {
 	for i := 0; i < len(g.Agents); i++ {
 		member := &g.Agents[i]
 		if member.Compare(from) {
@@ -37,9 +38,6 @@ func (g *Graph) AddEdge(from Agent, to Agent, ts int, ls int) {
 			memberTo = member
 		}
 	}
-
-	//memberFrom.AddConnection(memberTo, ts, ls)
-
 	memberFrom.connections = append(memberFrom.connections, Edge{memberFrom, memberTo, ts, ls})
 }
 

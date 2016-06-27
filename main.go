@@ -15,14 +15,14 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	numAgents := 10000
-	numEdges := 25000
-	numStep := 5000
+	numAgents := 100000
+	numEdges := 40000
+	numStep := 15000
 
 	exposedTime := 2
 	infectedTime := 150
 
-	seedSize := 5
+	seedSize := 1
 
 	edgeMaxLifeSpan := 100
 
